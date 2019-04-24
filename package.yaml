@@ -1,0 +1,83 @@
+name:                ingestion
+version:             0.1.0.0
+github:              "githubuser/ingestion"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2019 Author name here"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/ingestion#readme>
+
+dependencies:
+  - aeson         >= 1.0 && < 2.0
+  - base          >= 4.7 && < 5
+  - generic-lens  >= 1.0 && < 2.0
+  - protolude     >= 0.2 && < 0.3
+  - streaming     >= 0.2 && < 0.3
+  - registry      >= 0.1.3.5 && < 2
+
+library:
+  source-dirs: src
+
+default-extensions:
+  - DataKinds
+  - DeriveGeneric
+  - FlexibleContexts
+  - FlexibleInstances
+  - FunctionalDependencies
+  - GADTs
+  - LambdaCase
+  - MultiParamTypeClasses
+  - NamedFieldPuns
+  - NoImplicitPrelude
+  - OverloadedStrings
+  - PackageImports
+  - RankNTypes
+  - ScopedTypeVariables
+  - TupleSections
+  - TypeApplications
+  - TypeFamilies
+  - TypeOperators
+  - TypeSynonymInstances
+  - ViewPatterns
+
+ghc-options:
+  - -fhide-source-paths
+  - -Wall
+  - -fwarn-tabs
+
+
+executables:
+  ingestion-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+
+    dependencies:
+    - ingestion
+
+tests:
+  ingestion-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+
+    dependencies:
+    - ingestion
