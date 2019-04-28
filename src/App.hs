@@ -1,22 +1,33 @@
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
 module App where
 
 import           Data
+import           Data.Registry hiding (Output)
+import           FileProvider
+import           Ftp
+import           Http
 import           Input
 import           Output
-import           Stats
 import           Protolude
+import           Redis
+import           Stats
 
-newtype App m = App {
-  ingest :: m ()
+data App m = App {
+  input  :: Input m Record
+, output :: Output m
+, stats  :: Stats m
 }
 
-newApp :: (Monad m) => Input m Record -> Output m -> Stats m -> App m
-newApp input output stats = App {
-  ingest = ingest' input output stats
-}
-
-ingest' :: (Monad m) => Input m Record -> Output m -> Stats m -> m ()
-ingest' input output stats =
-  readInput input &
-  saveOutputs output &
-  saveStats stats (const ProcessedRecordStat)
+registry =
+     funTo @RIO (App @IO)
+  +: funTo @RIO (newInput @IO @Record)
+  +: funTo @RIO (newBatchedOutput @IO)
+  +: funTo @RIO (newRedisStats @IO)
+  +: funTo @RIO (newFtpFileProvider @IO)
+  +: funTo @RIO (newDecryptedFileProvider @IO)
+  +: funTo @RIO (newFtp @IO)
+  +: funTo @RIO (newEncryption @IO)
+  +: funTo @RIO (newHttp @IO)
+  +: funTo @RIO (newRedis @IO)
+  +: end
