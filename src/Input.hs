@@ -10,8 +10,8 @@ newtype Input m i = Input {
   readInput :: Stream (Of i) m ()
 }
 
-newInput :: forall m i . (Monad m, FromCSVRow i) => FileProvider m -> Input m i
-newInput fileProvider =
+newCsvInput :: forall m i . (Monad m, FromCSVRow i) => FileProvider m -> Input m i
+newCsvInput fileProvider =
   Input {
     readInput = readInput' fileProvider
   }

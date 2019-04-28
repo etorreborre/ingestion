@@ -1,6 +1,7 @@
 module Output where
 
 import           Data.Aeson
+import           Data.Registry hiding (Output)
 import           Http
 import           Protolude         hiding (concat, toList)
 import           Streaming
@@ -15,13 +16,13 @@ newHttpOutput http = Output {
   saveOutputs = saveOutputs' http
 }
 
-newBatchedOutput :: (Monad m) => Http m -> Output m
-newBatchedOutput http = Output {
-  saveOutputs = \stream -> concat $ saveOutputs' http (batchesOf 500 stream)
+newBatchedOutput :: (Monad m) => Tag "unbatched" (Output m) -> Output m
+newBatchedOutput output = Output {
+  saveOutputs = concat . saveOutputs (unTag output). batchesOf 500
 }
 
 saveOutputs' :: (Monad m, ToJSON a) => Http m ->  Stream (Of a) m () -> Stream (Of a) m ()
 saveOutputs' http = chain (void . postHttp http . makeRequest . toJSON)
 
 batchesOf :: (Monad m) => Int -> Stream (Of a) m r -> Stream (Of [a]) m r
-batchesOf batchSize stream = mapsM toList (chunksOf batchSize stream)
+batchesOf batchSize = mapsM toList . chunksOf batchSize

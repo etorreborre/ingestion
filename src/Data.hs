@@ -10,7 +10,7 @@ data Record = Record deriving (Generic, ToJSON)
 instance FromCSVRow Record where
   fromRow = const Record
 
-data ProcessedRecordStat = ProcessedRecordStat deriving (Generic, ToJSON)
+data ProcessedRecordStat = ProcessedRecordStat Record deriving (Generic, ToJSON)
 
 class FromCSVRow i where
   fromRow :: Text -> i

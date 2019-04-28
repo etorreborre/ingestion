@@ -11,4 +11,4 @@ main :: IO ()
 main = withRegistry registry $ \App {..} ->
   readInput input &
   saveOutputs output &
-  saveStats stats (const ProcessedRecordStat)
+  saveStats stats ProcessedRecordStat

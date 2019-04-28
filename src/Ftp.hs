@@ -9,7 +9,7 @@ newtype Ftp m = Ftp {
 data FtpConfig = FtpConfig {
   host :: Text
 , port :: Int
-}
+} deriving (Eq, Show)
 
 newFtp :: FtpConfig -> Ftp m
 newFtp _config = Ftp {
